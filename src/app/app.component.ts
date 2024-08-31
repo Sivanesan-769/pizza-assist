@@ -3,6 +3,8 @@ import { RouterOutlet } from '@angular/router';
 import { ImportsModule } from '../assets/common/imports';
 import { DataService } from '../services/data.service';
 import { NgFor } from '@angular/common';
+import { PizzaSize } from '../enum/pizza-size.enum';
+import { ExtraLargeSizeTotal, LargeSizeTotal, MediumSizeTotal, SmallSizeTotal } from '../constant/constant';
 
 @Component({
   selector: 'app-root',
@@ -66,18 +68,16 @@ export class AppComponent {
     this.checkboxState = this.data.map(() => this.columns.map(() => false));
   }
 
-  checkedData(rowIndex: number, colIndex: number): void {
-    if (this.checkboxState[colIndex][0]) {
-      this.smallSizeTotal += this.data[rowIndex].price;
-    }
-    if (this.checkboxState[colIndex][1]) {
-      this.mediumSizeTotal += this.data[rowIndex].price;
-    }
-    if (this.checkboxState[colIndex][2]) {
-      this.largeSizeTotal += this.data[rowIndex].price;
-    }
-    if (this.checkboxState[colIndex][0]) {
-      this.extraLargeSizeTotal += this.data[rowIndex].price;
-    }
+  checkedData(rowIndex: number, colIndex: PizzaSize, isChecked: boolean): void {
+    const sizeTotals = {
+      [PizzaSize.Small]: SmallSizeTotal,
+      [PizzaSize.Medium]: MediumSizeTotal,
+      [PizzaSize.Large]: LargeSizeTotal,
+      [PizzaSize.ExtraLarge]: ExtraLargeSizeTotal
+    } as const;
+  
+    const priceChange = isChecked ? this.data[rowIndex].price : -this.data[rowIndex].price;
+    this[sizeTotals[colIndex]] += priceChange;
+    this[sizeTotals[colIndex]] = parseFloat((this[sizeTotals[colIndex]]).toFixed(2));
   }
 }
