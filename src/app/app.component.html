@@ -26,7 +26,7 @@
           <p-checkbox
             *ngIf="checkboxState[rowIndex] && checkboxState[rowIndex][colIndex] !== undefined"
             [(ngModel)]="checkboxState[rowIndex][colIndex]"
-            (ngModelChange)="checkedData(rowIndex, colIndex)"
+            (ngModelChange)="checkedData(rowIndex, colIndex, checkboxState[rowIndex][colIndex])"
             [binary]="true"
             [inputId]="'checkbox_' + rowIndex + '_' + colIndex" />
         </td>
